@@ -20,6 +20,15 @@ import DatePicker from 'common/components/SearchPanelComponents/DatePicker'
 
 const styles: (theme: Theme) => StyleRules = (theme: Theme) =>
   createStyles({
+    [theme.breakpoints.down('sm')]: {
+      paper: {
+        flexDirection: 'column',
+        '& div': { width: '100%' }
+      }
+    },
+    icons: {
+      [theme.breakpoints.down('sm')]: { marginLeft: 'calc(100% - 100px)' }
+    },
     container: {
       width: '100%',
       height: '80vh',
@@ -28,8 +37,9 @@ const styles: (theme: Theme) => StyleRules = (theme: Theme) =>
       alignItems: 'center'
     },
     paper: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(1),
       width: '100%',
+      minWidth: 300,
       display: 'flex',
       maxWidth: 1000
     },
@@ -52,11 +62,6 @@ const styles: (theme: Theme) => StyleRules = (theme: Theme) =>
     },
     citiesInputs: {
       marginLeft: theme.spacing(0.5)
-    },
-    datePicker: {
-      '& :hover': {
-        cursor: 'pointer'
-      }
     },
     personsContainer: {
       display: 'flex',
@@ -85,8 +90,8 @@ function SearchPannel(props: any) {
   }
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <div className={props.classes.container}>
+    <div className={props.classes.container}>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Paper className={props.classes.paper}>
           <div className={props.classes.inputsContainer}>
             <TextField
@@ -97,7 +102,10 @@ function SearchPannel(props: any) {
               variant="outlined"
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">
+                  <InputAdornment
+                    position="end"
+                    className={props.classes.icons}
+                  >
                     <FlightTakeoff />
                   </InputAdornment>
                 )
@@ -111,7 +119,10 @@ function SearchPannel(props: any) {
               variant="outlined"
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">
+                  <InputAdornment
+                    position="end"
+                    className={props.classes.icons}
+                  >
                     <FlightLand />
                   </InputAdornment>
                 )
@@ -137,7 +148,10 @@ function SearchPannel(props: any) {
               defaultValue={1}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">
+                  <InputAdornment
+                    position="end"
+                    className={props.classes.icons}
+                  >
                     <PeopleAlt />
                   </InputAdornment>
                 )
@@ -145,8 +159,8 @@ function SearchPannel(props: any) {
             />
           </div>
         </Paper>
-      </div>
-    </MuiPickersUtilsProvider>
+      </MuiPickersUtilsProvider>
+    </div>
   )
 }
 export default withStyles(styles)(SearchPannel)

@@ -22,11 +22,18 @@ interface IProps {
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
+    root: {
+      display: 'flex'
+    },
     textField: {
+      width: '80%',
       '& *': {
         cursor: 'pointer !important',
-        marginRight: theme.spacing(0.5)
+        marginLeft: theme.spacing(0.5)
       }
+    },
+    icons: {
+      '& svg': { marginLeft: 'calc(100% - 50px)' }
     }
   })
 
@@ -53,10 +60,12 @@ function DatePicker(props: IProps) {
 
   return (
     <KeyboardDatePicker
+      className={props.classes.root}
       onClose={handleOnClose}
       open={pickerIsOpen}
       TextFieldComponent={() => (
         <TextField
+          classes={{}}
           className={props.classes.textField}
           variant="outlined"
           label={props.label}
@@ -65,7 +74,7 @@ function DatePicker(props: IProps) {
           InputProps={{
             readOnly: true,
             endAdornment: (
-              <InputAdornment position="end">
+              <InputAdornment position="end" className={props.classes.icons}>
                 <DateRange />
               </InputAdornment>
             )
