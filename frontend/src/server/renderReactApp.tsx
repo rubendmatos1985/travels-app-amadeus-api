@@ -1,44 +1,47 @@
-import * as ReactDOM from "react-dom/server";
-import * as Redux from "redux";
-import { Provider as ReduxProvider } from "react-redux";
-import { mainReducer } from "common/redux/reducers/mainReducer";
-import { Request } from "express";
-import * as React from "react";
-import { StaticRouter as Router, matchPath } from "react-router-dom";
-import { ThemeProvider, ServerStyleSheets } from "@material-ui/styles";
-import theme from "common/theme";
-import App from "common/App";
-import "isomorphic-fetch";
-import { routes, SSRRoute } from "common/routes/routes";
+import * as ReactDOM from 'react-dom/server'
+import * as Redux from 'redux'
+import { Provider as ReduxProvider } from 'react-redux'
+import { mainReducer } from 'common/redux/reducers/mainReducer'
+import { Request } from 'express'
+import * as React from 'react'
+import { StaticRouter as Router, matchPath } from 'react-router-dom'
+import { ThemeProvider, ServerStyleSheets } from '@material-ui/styles'
+import theme from 'common/theme'
+import App from 'common/App'
+import 'isomorphic-fetch'
+import { routes, SSRRoute } from 'common/routes/routes'
 
 export const renderReactApp = async (req: Request) => {
-  let fetchedData = {};
+  let fetchedData = {}
   const currentRoute: SSRRoute | undefined = routes.find(
     (route: SSRRoute) => matchPath(req.url, route) !== null
-  );
+  )
 
   if (currentRoute && currentRoute.needsFetchData) {
-    fetchedData = await currentRoute.fetchData().then((v) => v.json());
+    fetchedData = await currentRoute.fetchData().then(v => v.json())
   }
-  const sheets = new ServerStyleSheets();
+  const sheets = new ServerStyleSheets()
   const store = Redux.createStore(mainReducer, {
-    changeTitle: "",
+    changeTitle: '',
     ...fetchedData
-  } as any);
+  } as any)
 
   const appHtml = ReactDOM.renderToString(
     sheets.collect(
       <ReduxProvider store={store}>
-        <Router location={req.path} context={{}}>
-          <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <Router location={req.path} context={{}}>
             <App />
-          </ThemeProvider>
-        </Router>
+          </Router>
+        </ThemeProvider>
       </ReduxProvider>
     )
-  );
-  const appInitialState = JSON.stringify(store.getState()).replace(/</g, "\\u003c");
-  const appCSS = sheets.toString();
+  )
+  const appInitialState = JSON.stringify(store.getState()).replace(
+    /</g,
+    '\\u003c'
+  )
+  const appCSS = sheets.toString()
 
   return `
            <!DOCTYPE html>
@@ -65,5 +68,5 @@ export const renderReactApp = async (req: Request) => {
                   <script type="application/javascript" src="bundle.js"></script>
               </body>
           </html>
-      `;
-};
+      `
+}

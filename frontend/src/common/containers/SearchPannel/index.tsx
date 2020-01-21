@@ -9,7 +9,7 @@ import {
   Theme,
   InputAdornment
 } from '@material-ui/core'
-import { DateRange } from '@material-ui/icons'
+import { FlightTakeoff, FlightLand, PeopleAlt } from '@material-ui/icons'
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider
@@ -57,6 +57,12 @@ const styles: (theme: Theme) => StyleRules = (theme: Theme) =>
       '& :hover': {
         cursor: 'pointer'
       }
+    },
+    personsContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: theme.spacing(0.5)
     }
   })
 
@@ -89,6 +95,13 @@ function SearchPannel(props: any) {
               label="From"
               type="search"
               variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <FlightTakeoff />
+                  </InputAdornment>
+                )
+              }}
             />
             <TextField
               className={props.classes.citiesInputs}
@@ -96,6 +109,13 @@ function SearchPannel(props: any) {
               label="To"
               type="search"
               variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <FlightLand />
+                  </InputAdornment>
+                )
+              }}
             />
           </div>
           <div className={props.classes.datePickerContainer}>
@@ -108,6 +128,20 @@ function SearchPannel(props: any) {
               label="Return"
               date={returnDate}
               onChange={handleOnChangeReturnDate}
+            />
+          </div>
+          <div className={props.classes.personsContainer}>
+            <TextField
+              variant="outlined"
+              label="Passengers"
+              defaultValue={1}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <PeopleAlt />
+                  </InputAdornment>
+                )
+              }}
             />
           </div>
         </Paper>

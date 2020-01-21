@@ -1,23 +1,16 @@
-import * as React from "react";
-import { Typography } from "@material-ui/core";
+import * as React from 'react'
+import { Typography } from '@material-ui/core'
 
-interface TestProps {
+interface TestProps {}
+
+function Test(props: TestProps) {
+  console.log('TEST RENDEEEEER!!!')
+
+  return (
+    <React.Fragment>
+      <Typography>Test page</Typography>
+    </React.Fragment>
+  )
 }
 
-class Test extends React.Component<TestProps> {
-    constructor(props: TestProps) {
-        super(props);
-    }
-
-    public render() {
-        return (
-            <React.Fragment>
-                <Typography>
-                    Test page
-                </Typography>
-            </React.Fragment>
-        );
-    }
-}
-
-export default Test;
+export default Test

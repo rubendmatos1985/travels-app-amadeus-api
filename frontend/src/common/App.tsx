@@ -1,24 +1,27 @@
-import * as React from "react";
-import { Switch, Route } from "react-router-dom";
-import AppBar from "common/containers/AppBar/AppBar.component";
-import { routes } from "./routes/routes";
-import { ThemeProvider } from "@material-ui/styles";
-import AppContainer from "./components/AppContainer";
-import theme from "./theme";
+import * as React from 'react'
+import { Route } from 'react-router-dom'
+import AppBar from 'common/containers/AppBar/AppBar.component'
+import { routes, SSRRoute } from './routes/routes'
+import AppContainer from './components/AppContainer'
 
 const App = (props: any) => {
   return (
     <React.Fragment>
       <AppBar />
       <AppContainer>
-        <Switch>
-          {routes.map((route: any, i: number) => (
-            <Route key={i} component={route.component} />
-          ))}
-        </Switch>
+        {routes.map((route: SSRRoute, i) => {
+          const Component: (props: any) => React.ReactElement<any> =
+            route.component
+
+          return (
+            <Route exact={route.exact} path={route.path} key={i}>
+              <Component />
+            </Route>
+          )
+        })}
       </AppContainer>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default App;
+export default App
