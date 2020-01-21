@@ -47,7 +47,7 @@ export const renderReactApp = async (req: Request) => {
            <!DOCTYPE html>
           <html>
               <head>
-                  <title>TypeScript ReactJS SSR App</title>
+                  <title>Travels App</title>
                   <style>
                       body {
                           margin: 0px;
@@ -60,10 +60,6 @@ export const renderReactApp = async (req: Request) => {
                   <main id="root">${appHtml}</main>
                   <script>
                       window["__PRELOADED_STATE__"] = ${appInitialState}
-                      if(window !== undefined){
-                        let jss = document.getElementById('jss-server-side');
-                        jss.parentNode.removeChild(jss);
-                      }
                   </script>
                   <script type="application/javascript" src="bundle.js"></script>
               </body>
