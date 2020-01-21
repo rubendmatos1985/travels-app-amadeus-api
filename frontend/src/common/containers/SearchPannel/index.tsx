@@ -17,7 +17,7 @@ import {
 import { StyleRules } from '@material-ui/core/styles'
 import moment from 'moment'
 import DatePicker from 'common/components/SearchPanelComponents/DatePicker'
-
+import PassengersAmountSelector from '../../components/SearchPanelComponents/PassengersAmountSelector'
 const styles: (theme: Theme) => StyleRules = (theme: Theme) =>
   createStyles({
     [theme.breakpoints.down('sm')]: {
@@ -142,21 +142,7 @@ function SearchPannel(props: any) {
             />
           </div>
           <div className={props.classes.personsContainer}>
-            <TextField
-              variant="outlined"
-              label="Passengers"
-              defaultValue={1}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment
-                    position="end"
-                    className={props.classes.icons}
-                  >
-                    <PeopleAlt />
-                  </InputAdornment>
-                )
-              }}
-            />
+            <PassengersAmountSelector />
           </div>
         </Paper>
       </MuiPickersUtilsProvider>
