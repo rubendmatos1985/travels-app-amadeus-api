@@ -20,8 +20,9 @@ function main() {
     async (req, res) => {
       const result = await fetch(
         `http://localhost:3000/autocomplete?input=${req.query.input}`
-      ).then(v => v.json())
-      console.log(result)
+      )
+        .then(v => v.json())
+        .catch(e => e)
       res.json(result)
     }
   )
