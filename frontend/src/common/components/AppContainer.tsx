@@ -5,7 +5,6 @@ import { Switch } from 'react-router-dom'
 const styles = (theme: Theme) =>
   createStyles({
     container: {
-      padding: '1vw',
       width: '100%'
     }
   })

@@ -1,33 +1,29 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Store } from 'common/redux/store'
-import { changeTitle } from 'common/redux/action'
 import SearchPannel from '../containers/SearchPannel/index'
+import { createStyles, Theme, withStyles } from '@material-ui/core'
 
 interface HomeProps {
-  title: string
-  updateTitle: any
-  fetchRecomendations: any
-  recomendations: any
+  classes: any
 }
+const styles = (theme: Theme) =>
+  createStyles({
+    homeContainer: {
+      width: '100%',
+      height: '80vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
+  })
 
 function Home(props: HomeProps) {
   return (
-    <React.Fragment>
+    <main className={props.classes.homeContainer}>
       <SearchPannel />
-    </React.Fragment>
+    </main>
   )
 }
 
-const mapStateToProps = (state: Store) => {
-  return {
-    title: state.title,
-    recomendations: state.recommendations
-  }
-}
-
-const mapDispatchToProps = (dispatch: any) => ({
-  updateTitle: (title: string) => dispatch(changeTitle(title))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default withStyles(styles)(Home)

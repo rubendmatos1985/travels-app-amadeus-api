@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent, Fragment } from 'react'
 import { useState } from 'react'
 import DateFnsUtils from '@date-io/date-fns'
 import {
@@ -7,71 +7,33 @@ import {
   withStyles,
   createStyles,
   Theme,
-  InputAdornment
+  InputAdornment,
+  Button,
+  Grid
 } from '@material-ui/core'
-import { FlightTakeoff, FlightLand, PeopleAlt } from '@material-ui/icons'
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider
-} from '@material-ui/pickers'
-import { StyleRules } from '@material-ui/core/styles'
 import moment from 'moment'
 import DatePicker from 'common/components/SearchPanelComponents/DatePicker'
 import PassengersAmountSelector from '../../components/SearchPanelComponents/PassengersAmountSelector'
-const styles: (theme: Theme) => StyleRules = (theme: Theme) =>
-  createStyles({
-    [theme.breakpoints.down('sm')]: {
-      paper: {
-        flexDirection: 'column',
-        '& div': { width: '100%' }
-      }
-    },
-    icons: {
-      [theme.breakpoints.down('sm')]: { marginLeft: 'calc(100% - 100px)' }
-    },
-    container: {
-      width: '100%',
-      height: '80vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    paper: {
-      padding: theme.spacing(1),
-      width: '100%',
-      minWidth: 300,
-      display: 'flex',
-      maxWidth: 1000
-    },
-    datePickerContainer: {
-      '& div': {
-        padding: 0,
-        margin: 0
-      },
-      width: '40%',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'flex-start',
-      padding: theme.spacing(1)
-    },
-    inputsContainer: {
-      width: '40%',
-      display: 'flex',
-      justifyContent: 'space-between',
-      padding: theme.spacing(1)
-    },
-    citiesInputs: {
-      marginLeft: theme.spacing(0.5)
-    },
-    personsContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: theme.spacing(0.5)
-    }
-  })
+import { compose } from 'redux'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { connect } from 'react-redux'
+import { Store } from 'common/redux/store'
+import { getAutoCompletition } from 'common/redux/action'
+import { ReduxAction } from 'common/redux/reducers/home'
+import { ThunkDispatch } from 'redux-thunk'
+import { searchPanelStyles as styles } from './styles'
+import SearchCityTextField, {
+  FlightPoint,
+  emptySuggestionList
+} from 'common/components/SearchPanelComponents/SearchCityTextField'
 
-function SearchPannel(props: any) {
+interface IProps {
+  autocompletition: any
+  autocomplete: (input: string) => Promise<any>
+  classes: any
+}
+
+function SearchPannel(props: IProps) {
   const [departDate, setDepartDate] = useState(
     moment(new Date()).format('DDD/MMM/YYYY')
   )
@@ -89,64 +51,82 @@ function SearchPannel(props: any) {
     setReturnDate(date)
   }
 
+  const handleOriginInput = (e: ChangeEvent<HTMLInputElement>) => {
+    props.autocomplete(e.target.value)
+  }
+
+  const handleDestinationInput = (e: ChangeEvent<HTMLInputElement>) => {
+    props.autocomplete(e.target.value)
+  }
+
   return (
-    <div className={props.classes.container}>
+    <Fragment>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Paper className={props.classes.paper}>
-          <div className={props.classes.inputsContainer}>
-            <TextField
-              className={props.classes.citiesInputs}
-              id="standard-search"
-              label="From"
-              type="search"
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment
-                    position="end"
-                    className={props.classes.icons}
-                  >
-                    <FlightTakeoff />
-                  </InputAdornment>
-                )
-              }}
-            />
-            <TextField
-              className={props.classes.citiesInputs}
-              id="standard-search1"
-              label="To"
-              type="search"
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment
-                    position="end"
-                    className={props.classes.icons}
-                  >
-                    <FlightLand />
-                  </InputAdornment>
-                )
-              }}
-            />
-          </div>
-          <div className={props.classes.datePickerContainer}>
-            <DatePicker
-              label="Depart"
-              date={departDate}
-              onChange={handleOnChangeDepartDate}
-            />
-            <DatePicker
-              label="Return"
-              date={returnDate}
-              onChange={handleOnChangeReturnDate}
-            />
-          </div>
-          <div className={props.classes.personsContainer}>
-            <PassengersAmountSelector />
+          <div className={props.classes.searchPanelContainer}>
+            <div className={props.classes.searchCitiesContainer}>
+              <SearchCityTextField
+                flightPoint={FlightPoint.From}
+                onChange={handleOriginInput}
+                suggestionList={
+                  props.autocompletition
+                    ? props.autocompletition.data
+                    : emptySuggestionList
+                }
+              />
+              <SearchCityTextField
+                flightPoint={FlightPoint.To}
+                onChange={handleDestinationInput}
+                suggestionList={
+                  props.autocompletition
+                    ? props.autocompletition.data
+                    : emptySuggestionList
+                }
+              />
+            </div>
+            <div className={props.classes.searchDateContainer}>
+              <DatePicker
+                label="Depart"
+                date={departDate}
+                onChange={handleOnChangeDepartDate}
+              />
+              <DatePicker
+                label="Return"
+                date={returnDate}
+                onChange={handleOnChangeReturnDate}
+              />
+            </div>
+            <div className={props.classes.searchPassengersContainer}>
+              <PassengersAmountSelector />
+            </div>
+            <div className={props.classes.searchButtonContainer}>
+              <Button
+                className={props.classes.searchButton}
+                variant="contained"
+                color="secondary"
+                style={{ width: 100 }}
+              >
+                Search
+              </Button>
+            </div>
           </div>
         </Paper>
       </MuiPickersUtilsProvider>
-    </div>
+    </Fragment>
   )
 }
-export default withStyles(styles)(SearchPannel)
+
+const mapStateToProps = (store: Store) => ({
+  autocompletition: store.home.autocompletition
+})
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<Store, null, ReduxAction>
+) => ({
+  autocomplete: (input: string) => dispatch(getAutoCompletition(input))
+})
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withStyles(styles)
+)(SearchPannel)

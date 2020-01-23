@@ -11,24 +11,23 @@ import App from 'common/App'
 import 'isomorphic-fetch'
 import { routes, SSRRoute } from 'common/routes/routes'
 
-export const renderReactApp = async (req: Request) => {
-  let fetchedData = {}
+export const renderReactApp = async (req: Request, token: string) => {
+  let fetchedData: any = {}
   const currentRoute: SSRRoute | undefined = routes.find(
     (route: SSRRoute) => matchPath(req.url, route) !== null
   )
 
   if (currentRoute && currentRoute.needsFetchData) {
-    fetchedData = await currentRoute.fetchData().then(v => v.json())
+    fetchedData[
+      currentRoute.name
+    ] = await currentRoute.fetchData().then((v: any) => v.json())
   }
   const sheets = new ServerStyleSheets()
-  const store = Redux.createStore(mainReducer, {
-    changeTitle: '',
-    ...fetchedData
-  } as any)
+  const store = Redux.createStore(mainReducer, fetchedData)
 
   const appHtml = ReactDOM.renderToString(
     sheets.collect(
-      <ReduxProvider store={store}>
+      <ReduxProvider store={{ ...store, token: token } as any}>
         <ThemeProvider theme={theme}>
           <Router location={req.path} context={{}}>
             <App />
@@ -58,8 +57,9 @@ export const renderReactApp = async (req: Request) => {
               </head>
               <body>
                   <main id="root">${appHtml}</main>
-                  <script>
+                  <script id="temp_script">
                       window["__PRELOADED_STATE__"] = ${appInitialState}
+                      window["__TOKEN__"] = "${token}"
                   </script>
                   <script type="application/javascript" src="bundle.js"></script>
               </body>

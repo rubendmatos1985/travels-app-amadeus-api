@@ -7,14 +7,13 @@ import { ThemeProvider } from '@material-ui/styles'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import App from 'common/App'
 import theme from 'common/theme'
-import { changeTitle } from 'common/redux/reducers/title'
 import thunk from 'redux-thunk'
 import { applyMiddleware } from 'redux'
+import { mainReducer } from 'common/redux/reducers/mainReducer'
 const preloadedState = (window as any)['__PRELOADED_STATE__']
 delete (window as any)['__PRELOADED_STATE__']
-
 const store = Redux.createStore(
-  changeTitle,
+  mainReducer,
   preloadedState,
   composeWithDevTools(applyMiddleware(thunk))
 )
@@ -22,8 +21,12 @@ const store = Redux.createStore(
 function Main() {
   React.useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side')
+    const script = document.querySelector('#temp_script')
     if (jssStyles) {
       jssStyles.parentNode.removeChild(jssStyles)
+    }
+    if (script) {
+      script.remove()
     }
   }, [])
 

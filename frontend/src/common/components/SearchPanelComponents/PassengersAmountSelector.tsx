@@ -17,12 +17,11 @@ interface IProps {
 
 const styles = (theme: Theme) =>
   createStyles({
-    icons: {
-      [theme.breakpoints.down('sm')]: { marginLeft: 'calc(100% - 100px)' }
-    },
     root: {
+      width: '100px',
       '& *': {
-        cursor: 'pointer !important'
+        cursor: 'pointer !important',
+        zIndex: 'unset'
       }
     }
   })
