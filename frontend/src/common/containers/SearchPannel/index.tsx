@@ -101,6 +101,7 @@ function SearchPannel(props: IProps) {
             </div>
             <div className={props.classes.searchDateContainer}>
               <DatePicker
+                maxDate={moment().add(1, 'year')}
                 disablePast
                 label="Depart"
                 date={departDate.format('DD/MM/YYYY')}
@@ -108,6 +109,7 @@ function SearchPannel(props: IProps) {
               />
               <DatePicker
                 minDate={departDate.clone().add(1, 'day')}
+                maxDate={departDate.clone().add(2, 'week')}
                 label="Return"
                 date={returnDate.format('DD/MM/YYYY')}
                 onChange={handleReturnDate}

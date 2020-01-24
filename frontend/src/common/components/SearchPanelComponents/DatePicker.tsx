@@ -14,6 +14,7 @@ import moment, { Moment } from 'moment'
 interface IProps {
   disablePast?: boolean
   minDate?: Moment
+  maxDate?: Moment
   date: string
   onClose?: () => void
   onChange: (date: Moment) => void
@@ -64,6 +65,7 @@ function DatePicker(props: IProps) {
   return (
     <KeyboardDatePicker
       minDate={props.minDate ? props.minDate.toDate() : new Date()}
+      maxDate={props.maxDate.toDate()}
       disablePast={props.disablePast}
       className={props.classes.dateFieldContainer}
       onClose={handleOnClose}
