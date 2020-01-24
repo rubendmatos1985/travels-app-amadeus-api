@@ -9,12 +9,14 @@ import {
   StyleRules
 } from '@material-ui/core'
 import { DateRange } from '@material-ui/icons'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 
 interface IProps {
+  disablePast?: boolean
+  minDate?: Moment
   date: string
   onClose?: () => void
-  onChange: (date: string) => void
+  onChange: (date: Moment) => void
   onClick?: () => void
   label: string
   classes: any
@@ -59,18 +61,15 @@ function DatePicker(props: IProps) {
     }
   }
 
-  const handleOnChange = (date: Date) => {
-    props.onChange(moment(date).format('DDD/MM/YYYY'))
-  }
-
   return (
     <KeyboardDatePicker
+      minDate={props.minDate ? props.minDate.toDate() : new Date()}
+      disablePast={props.disablePast}
       className={props.classes.dateFieldContainer}
       onClose={handleOnClose}
       open={pickerIsOpen}
       TextFieldComponent={() => (
         <TextField
-          classes={{}}
           className={props.classes.textField}
           variant="outlined"
           label={props.label}
@@ -88,9 +87,8 @@ function DatePicker(props: IProps) {
       )}
       margin="normal"
       id="date-picker-dialog"
-      format="MM/dd/yyyy"
       value={props.date}
-      onChange={handleOnChange}
+      onChange={(date: Date) => props.onChange(moment(date))}
       KeyboardButtonProps={{
         'aria-label': 'change date'
       }}

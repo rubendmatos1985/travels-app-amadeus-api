@@ -13,18 +13,26 @@ function main() {
   const app = Express()
   const port = 8080
   const token = jwt.sign({ user, password }, secret)
+  const tokenValidator = validateAppToken((req: Request) =>
+    jwt.verify(req.query.token, secret)
+  )
   app.use(Express.static('build'))
+
+  app.get('/autocomplete', tokenValidator, async (req, res) => {
+    const result = await fetch(
+      `http://localhost:3000/autocomplete?input=${req.query.input}`
+    )
+      .then((v: any) => v.json())
+      .catch((e: any) => e)
+
+    return res.json(result)
+  })
+
   app.get(
-    '/autocomplete',
-    validateAppToken((req: Request) => jwt.verify(req.query.token, secret)),
-    async (req, res) => {
-      const result = await fetch(
-        `http://localhost:3000/autocomplete?input=${req.query.input}`
-      )
-        .then(v => v.json())
-        .catch(e => e)
-      res.json(result)
-    }
+    '/flight-offers',
+    tokenValidator,
+    async (req, res) =>
+      `http://localhost:3000/autocomplete?input=${req.query.input}`
   )
 
   app.get('/*', async (req: Request, res: Response, next: NextFunction) => {
@@ -34,7 +42,10 @@ function main() {
       return res.send(reactApp)
     } catch (e) {
       console.log(e)
-      res.json({ message: 'We are having some errors. please come back later' })
+
+      return res.json({
+        message: 'We are having some errors. please come back later'
+      })
     }
   })
 

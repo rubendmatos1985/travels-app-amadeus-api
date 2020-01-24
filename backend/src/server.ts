@@ -26,6 +26,19 @@ App.get('/recommendations', async (req: Request, res: Response) => {
   }
 })
 
+App.get('/flight-offers', async (req, res) => {
+  //https://test.api.amadeus.com/v1/shopping/flight-offers?origin=NYC&destination=MAD&departureDate=2020-10-01&max=2
+  const { origin, destination, departureDate } = req.query
+  const result = await amadeus.shopping.flightOffers
+    .get({ origin, destination, departureDate })
+    .then((v: any) => ({ status: 'Successfully', data: v.result }))
+    .catch((e: any) => ({ status: 'Error', data: e }))
+  if (result.status === 'Successfully') {
+    return res.send(result.data)
+  }
+  return res.status(400).send(result)
+})
+
 App.get('/autocomplete', async (req: Request, res: Response) => {
   const result = await amadeus.referenceData.locations
     .get({ subType: 'AIRPORT,CITY', keyword: req.query.input, view: 'LIGHT' })

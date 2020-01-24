@@ -11,7 +11,7 @@ import {
   Button,
   Grid
 } from '@material-ui/core'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import DatePicker from 'common/components/SearchPanelComponents/DatePicker'
 import PassengersAmountSelector from '../../components/SearchPanelComponents/PassengersAmountSelector'
 import { compose } from 'redux'
@@ -24,7 +24,8 @@ import { ThunkDispatch } from 'redux-thunk'
 import { searchPanelStyles as styles } from './styles'
 import SearchCityTextField, {
   FlightPoint,
-  emptySuggestionList
+  emptySuggestionList,
+  ISelectedPlaceData
 } from 'common/components/SearchPanelComponents/SearchCityTextField'
 
 interface IProps {
@@ -34,30 +35,42 @@ interface IProps {
 }
 
 function SearchPannel(props: IProps) {
-  const [departDate, setDepartDate] = useState(
-    moment(new Date()).format('DDD/MMM/YYYY')
+  const [departDate, setDepartDate] = useState<Moment>(moment())
+  const [returnDate, setReturnDate] = useState<Moment>(
+    moment(departDate).add(7, 'days')
   )
-  const [returnDate, setReturnDate] = useState(
-    moment(departDate)
-      .add(7, 'days')
-      .format('DDD/MMM/YYYY')
+  const [originPlace, setOriginPlace] = useState<ISelectedPlaceData>(
+    {} as ISelectedPlaceData
+  )
+  const [destinationPlace, setDestinationPlace] = useState<ISelectedPlaceData>(
+    {} as ISelectedPlaceData
   )
 
-  const handleOnChangeDepartDate = (date: string) => {
+  const handleDepartDate = (date: Moment) => {
     setDepartDate(date)
   }
 
-  const handleOnChangeReturnDate = (date: string) => {
+  const handleReturnDate = (date: Moment) => {
     setReturnDate(date)
   }
 
-  const handleOriginInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChangeOriginInput = (e: ChangeEvent<HTMLInputElement>) => {
     props.autocomplete(e.target.value)
   }
 
-  const handleDestinationInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChangeDestinationInput = (e: ChangeEvent<HTMLInputElement>) => {
     props.autocomplete(e.target.value)
   }
+
+  const handleSelectOriginInput = (data: ISelectedPlaceData) => {
+    setOriginPlace(data)
+  }
+
+  const handleSelectDestinationInput = (data: ISelectedPlaceData) => {
+    setDestinationPlace(data)
+  }
+
+  const handleSearchFlightOffers = (e: React.MouseEvent) => {}
 
   return (
     <Fragment>
@@ -67,7 +80,8 @@ function SearchPannel(props: IProps) {
             <div className={props.classes.searchCitiesContainer}>
               <SearchCityTextField
                 flightPoint={FlightPoint.From}
-                onChange={handleOriginInput}
+                onChange={handleOnChangeOriginInput}
+                onSelect={handleSelectOriginInput}
                 suggestionList={
                   props.autocompletition
                     ? props.autocompletition.data
@@ -76,7 +90,8 @@ function SearchPannel(props: IProps) {
               />
               <SearchCityTextField
                 flightPoint={FlightPoint.To}
-                onChange={handleDestinationInput}
+                onChange={handleOnChangeDestinationInput}
+                onSelect={handleSelectDestinationInput}
                 suggestionList={
                   props.autocompletition
                     ? props.autocompletition.data
@@ -86,14 +101,16 @@ function SearchPannel(props: IProps) {
             </div>
             <div className={props.classes.searchDateContainer}>
               <DatePicker
+                disablePast
                 label="Depart"
-                date={departDate}
-                onChange={handleOnChangeDepartDate}
+                date={departDate.format('DD/MM/YYYY')}
+                onChange={handleDepartDate}
               />
               <DatePicker
+                minDate={departDate.clone().add(1, 'day')}
                 label="Return"
-                date={returnDate}
-                onChange={handleOnChangeReturnDate}
+                date={returnDate.format('DD/MM/YYYY')}
+                onChange={handleReturnDate}
               />
             </div>
             <div className={props.classes.searchPassengersContainer}>
@@ -101,6 +118,7 @@ function SearchPannel(props: IProps) {
             </div>
             <div className={props.classes.searchButtonContainer}>
               <Button
+                onClick={handleSearchFlightOffers}
                 className={props.classes.searchButton}
                 variant="contained"
                 color="secondary"

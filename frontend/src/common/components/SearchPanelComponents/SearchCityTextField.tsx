@@ -24,8 +24,14 @@ export enum FlightPoint {
   To = 'To'
 }
 
+export interface ISelectedPlaceData {
+  name: string
+  iata: string
+}
+
 interface IProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onSelect: (data: ISelectedPlaceData) => void
   classes: any
   flightPoint: FlightPoint
   suggestionList: SuggestionsListItem[]
@@ -70,14 +76,8 @@ const styles = (theme: Theme) =>
   })
 
 function SearchCityTextField(props: IProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false)
-
-  const handleCloseMenu = (e: React.MouseEvent<Document, MouseEvent>) =>
-    setMenuIsOpen(false)
-
-  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void =>
-    !menuIsOpen && setMenuIsOpen(true)
+  const handleOnSelectPlace = (data: ISelectedPlaceData) => () =>
+    props.onSelect(data)
 
   return (
     <Fragment>
@@ -88,7 +88,9 @@ function SearchCityTextField(props: IProps) {
         autoHighlight
         getOptionLabel={(o: SuggestionsListItem) => `${o.name}, ${o.iataCode}`}
         renderOption={(o: SuggestionsListItem) => (
-          <ListItemText>{`${o.name} ${o.iataCode}`}</ListItemText>
+          <ListItemText
+            onClick={handleOnSelectPlace({ name: o.name, iata: o.iataCode })}
+          >{`${o.name} ${o.iataCode}`}</ListItemText>
         )}
         renderInput={(params: any) => (
           <TextField

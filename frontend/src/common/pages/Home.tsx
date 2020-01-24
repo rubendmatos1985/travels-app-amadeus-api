@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { connect } from 'react-redux'
-import { Store } from 'common/redux/store'
 import SearchPannel from '../containers/SearchPannel/index'
 import { createStyles, Theme, withStyles } from '@material-ui/core'
 
