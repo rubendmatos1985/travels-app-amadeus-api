@@ -89,6 +89,7 @@ function SearchCityTextField(props: IProps) {
         getOptionLabel={(o: SuggestionsListItem) => `${o.name}, ${o.iataCode}`}
         renderOption={(o: SuggestionsListItem) => (
           <ListItemText
+            className="autocompleteListItems"
             onClick={handleOnSelectPlace({ name: o.name, iata: o.iataCode })}
           >{`${o.name} ${o.iataCode}`}</ListItemText>
         )}

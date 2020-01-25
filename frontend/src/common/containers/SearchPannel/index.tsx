@@ -3,30 +3,27 @@ import { useState } from 'react'
 import DateFnsUtils from '@date-io/date-fns'
 import {
   Paper,
-  TextField,
-  withStyles,
   createStyles,
   Theme,
-  InputAdornment,
   Button,
-  Grid
+  withStyles
 } from '@material-ui/core'
 import moment, { Moment } from 'moment'
-import DatePicker from 'common/components/SearchPanelComponents/DatePicker'
+import DatePicker from '../../components/SearchPanelComponents/DatePicker'
 import PassengersAmountSelector from '../../components/SearchPanelComponents/PassengersAmountSelector'
 import { compose } from 'redux'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { connect } from 'react-redux'
-import { Store } from 'common/redux/store'
-import { getAutoCompletition } from 'common/redux/action'
-import { ReduxAction } from 'common/redux/reducers/home'
+import { Store } from '../../redux/store'
+import { getAutoCompletition } from '../../redux/action'
+import { ReduxAction } from '../../redux/reducers/home'
 import { ThunkDispatch } from 'redux-thunk'
 import { searchPanelStyles as styles } from './styles'
 import SearchCityTextField, {
   FlightPoint,
   emptySuggestionList,
   ISelectedPlaceData
-} from 'common/components/SearchPanelComponents/SearchCityTextField'
+} from '../../components/SearchPanelComponents/SearchCityTextField'
 
 interface IProps {
   autocompletition: any

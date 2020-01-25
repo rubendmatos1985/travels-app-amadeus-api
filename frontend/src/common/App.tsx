@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import AppBar from 'common/containers/AppBar/AppBar.component'
 import { routes, SSRRoute } from './routes/routes'
 import AppContainer from './components/AppContainer'
@@ -19,6 +19,7 @@ const App = (props: any) => {
             </Route>
           )
         })}
+        <Redirect from="/*" to="/home" />
       </AppContainer>
     </React.Fragment>
   )

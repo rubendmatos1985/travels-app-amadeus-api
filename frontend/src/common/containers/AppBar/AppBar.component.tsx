@@ -1,20 +1,26 @@
-import * as React from "react";
-import { AppBar as BaseAppBar, Typography, Grid, Toolbar, withStyles } from "@material-ui/core";
+import * as React from 'react'
+import {
+  AppBar as BaseAppBar,
+  Typography,
+  Grid,
+  Toolbar,
+  withStyles
+} from '@material-ui/core'
 
-import NavLinkButton from "common/components/NavLinkButton/NavLinkButton.component";
-import style from "./AppBar.style";
+import NavLinkButton from '../../components/NavLinkButton/NavLinkButton.component'
+import style from './AppBar.style'
 
 interface AppBarProps {
-  classes: any;
+  classes: any
 }
 
 class AppBar extends React.Component<AppBarProps> {
   constructor(props: AppBarProps) {
-    super(props);
+    super(props)
   }
 
   public render() {
-    const { classes } = this.props;
+    const { classes } = this.props
 
     return (
       <React.Fragment>
@@ -50,8 +56,8 @@ class AppBar extends React.Component<AppBarProps> {
           </Toolbar>
         </BaseAppBar>
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default withStyles(style)(AppBar);
+export default withStyles(style)(AppBar)
