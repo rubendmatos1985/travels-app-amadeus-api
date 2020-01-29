@@ -1,5 +1,6 @@
-import { selectOptionFromAutocomplete } from '../commons/select_option_from_autocomplete'
-
+const {
+  selectOptionFromAutocomplete
+} = require('../../../frontend/cypress/commons/select_option_from_autocomplete')
 describe('<SearchPanel/>', () => {
   beforeEach(() => {
     cy.visit('localhost:8080')
