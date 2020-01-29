@@ -1,6 +1,3 @@
-const fs = require('fs')
-const webpack = require('webpack')
-const path = require('path')
 const { typescriptCypressTranspiler } = require('typescript-cypress')
 const _module = {
   rules: [
