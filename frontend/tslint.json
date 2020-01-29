@@ -1,4 +1,5 @@
 {
+  "extends": "tslint-config-prettier",
   "rules": {
     "arrow-parens": true,
     "class-name": true,
