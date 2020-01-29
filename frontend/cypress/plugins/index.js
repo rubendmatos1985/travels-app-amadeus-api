@@ -1,17 +1,40 @@
-// ***********************************************************
-// This example plugins/index.js can be used to load plugins
-//
-// You can change the location of this file or turn off loading
-// the plugins file with the 'pluginsFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/plugins-guide
-// ***********************************************************
-
-// This function is called when a project is opened or re-opened (e.g. due to
-// the project's config changing)
-
-module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+const fs = require('fs')
+const webpack = require('webpack')
+const path = require('path')
+const { typescriptCypressTranspiler } = require('typescript-cypress')
+const _module = {
+  rules: [
+    {
+      test: /\.tsx?$/,
+      use: [
+        {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env'],
+              '@babel/preset-typescript',
+              ['@babel/preset-react', { development: true }]
+            ],
+            plugins: [
+              '@babel/plugin-transform-destructuring',
+              '@babel/plugin-proposal-object-rest-spread',
+              '@babel/plugin-transform-typescript',
+              '@babel/plugin-transform-parameters',
+              '@babel/plugin-proposal-export-default-from',
+              [
+                '@babel/plugin-transform-runtime',
+                {
+                  corejs: 2
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      exclude: /node_modules/
+    }
+  ]
 }
+
+module.exports = (on, config) =>
+  on('file:preprocessor', typescriptCypressTranspiler(_module))

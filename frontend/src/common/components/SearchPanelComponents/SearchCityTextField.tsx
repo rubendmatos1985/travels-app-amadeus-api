@@ -5,19 +5,8 @@ import {
   withStyles,
   createStyles,
   Theme,
-  Popper,
-  Grow,
-  ClickAwayListener,
-  MenuList,
-  Paper,
-  MenuItem,
-  ListItemText,
-  ListItemIcon,
-  Popover,
-  Menu,
-  ListItem
+  ListItemText
 } from '@material-ui/core'
-import { FlightLand, FlightTakeoff, GpsFixedTwoTone } from '@material-ui/icons'
 import { Autocomplete } from '@material-ui/lab'
 export enum FlightPoint {
   From = 'From',
@@ -35,6 +24,7 @@ interface IProps {
   classes: any
   flightPoint: FlightPoint
   suggestionList: SuggestionsListItem[]
+  id?: string
 }
 
 export interface SuggestionsListItem {
@@ -82,6 +72,8 @@ function SearchCityTextField(props: IProps) {
   return (
     <Fragment>
       <Autocomplete
+        id={props.id}
+        debug
         className={props.classes.cityInputContainer}
         freeSolo
         options={props.suggestionList}
@@ -89,7 +81,6 @@ function SearchCityTextField(props: IProps) {
         getOptionLabel={(o: SuggestionsListItem) => `${o.name}, ${o.iataCode}`}
         renderOption={(o: SuggestionsListItem) => (
           <ListItemText
-            className="autocompleteListItems"
             onClick={handleOnSelectPlace({ name: o.name, iata: o.iataCode })}
           >{`${o.name} ${o.iataCode}`}</ListItemText>
         )}
@@ -100,7 +91,7 @@ function SearchCityTextField(props: IProps) {
             {...params}
             label={props.flightPoint}
             variant="outlined"
-            inputProps={...params.inputProps}
+            /*  inputProps={...params.inputProps} */
           />
         )}
       />

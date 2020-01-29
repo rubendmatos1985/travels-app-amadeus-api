@@ -44,7 +44,7 @@ function main() {
       console.log(e)
 
       return res.json({
-        message: 'We are having some errors. please come back later'
+        message: 'We are having some problems. please come back later'
       })
     }
   })

@@ -1,5 +1,5 @@
 describe('app start', () => {
-  it('home as app start point', () => {
+  it('home as starting point', () => {
     cy.visit('localhost:8080')
     cy.url().should('include', 'home')
   })

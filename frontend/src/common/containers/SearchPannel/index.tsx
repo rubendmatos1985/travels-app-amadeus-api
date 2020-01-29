@@ -69,6 +69,23 @@ function SearchPannel(props: IProps) {
 
   const handleSearchFlightOffers = (e: React.MouseEvent) => {}
 
+  const getSuggestionsForOriginInput = () =>
+    props.autocompletition
+      ? props.autocompletition.data.filter(
+          (d: { name: string; iataCode: string }) =>
+            d.name !== destinationPlace.name &&
+            d.iataCode !== destinationPlace.iata
+        )
+      : emptySuggestionList
+
+  const getSuggestionsForDestinationInput = () =>
+    props.autocompletition
+      ? props.autocompletition.data.filter(
+          (d: { name: string; iataCode: string }) =>
+            d.name !== originPlace.name && d.iataCode !== originPlace.iata
+        )
+      : emptySuggestionList
+
   return (
     <Fragment>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -76,24 +93,18 @@ function SearchPannel(props: IProps) {
           <div className={props.classes.searchPanelContainer}>
             <div className={props.classes.searchCitiesContainer}>
               <SearchCityTextField
+                id="origin-input"
                 flightPoint={FlightPoint.From}
                 onChange={handleOnChangeOriginInput}
                 onSelect={handleSelectOriginInput}
-                suggestionList={
-                  props.autocompletition
-                    ? props.autocompletition.data
-                    : emptySuggestionList
-                }
+                suggestionList={getSuggestionsForOriginInput()}
               />
               <SearchCityTextField
+                id="destination-input"
                 flightPoint={FlightPoint.To}
                 onChange={handleOnChangeDestinationInput}
                 onSelect={handleSelectDestinationInput}
-                suggestionList={
-                  props.autocompletition
-                    ? props.autocompletition.data
-                    : emptySuggestionList
-                }
+                suggestionList={getSuggestionsForDestinationInput()}
               />
             </div>
             <div className={props.classes.searchDateContainer}>
