@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { KeyboardDatePicker } from '@material-ui/pickers'
+import React, { useState } from 'react';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import {
   TextField,
   InputAdornment,
@@ -7,20 +7,20 @@ import {
   createStyles,
   Theme,
   StyleRules
-} from '@material-ui/core'
-import { DateRange } from '@material-ui/icons'
-import moment, { Moment } from 'moment'
+} from '@material-ui/core';
+import { DateRange } from '@material-ui/icons';
+import moment, { Moment } from 'moment';
 
 interface IProps {
-  disablePast?: boolean
-  minDate?: Moment
-  maxDate?: Moment
-  date: string
-  onClose?: () => void
-  onChange: (date: Moment) => void
-  onClick?: () => void
-  label: string
-  classes: any
+  disablePast?: boolean;
+  minDate?: Moment;
+  maxDate?: Moment;
+  date: string;
+  onClose?: () => void;
+  onChange: (date: Moment) => void;
+  onClick?: () => void;
+  label: string;
+  classes: any;
 }
 
 const styles = (theme: Theme): StyleRules =>
@@ -43,24 +43,24 @@ const styles = (theme: Theme): StyleRules =>
     icons: {
       '& svg': { marginLeft: 'calc(100% - 50px)' }
     }
-  })
+  });
 
 function DatePicker(props: IProps) {
-  const [pickerIsOpen, setPickerIsOpen] = useState(false)
+  const [pickerIsOpen, setPickerIsOpen] = useState(false);
 
   const handleOnClose = () => {
-    setPickerIsOpen(false)
+    setPickerIsOpen(false);
     if (props.onClose) {
-      props.onClose()
+      props.onClose();
     }
-  }
+  };
 
   const handleOnClick = () => {
-    setPickerIsOpen(true)
+    setPickerIsOpen(true);
     if (props.onClick) {
-      props.onClick()
+      props.onClick();
     }
-  }
+  };
 
   return (
     <KeyboardDatePicker
@@ -72,6 +72,7 @@ function DatePicker(props: IProps) {
       open={pickerIsOpen}
       TextFieldComponent={() => (
         <TextField
+          id={`${props.label.toLowerCase()}-date`}
           className={props.classes.textField}
           variant="outlined"
           label={props.label}
@@ -95,7 +96,7 @@ function DatePicker(props: IProps) {
         'aria-label': 'change date'
       }}
     />
-  )
+  );
 }
 
-export default withStyles(styles)(DatePicker)
+export default withStyles(styles)(DatePicker);
