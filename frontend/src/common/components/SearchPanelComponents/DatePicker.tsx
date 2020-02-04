@@ -15,7 +15,7 @@ interface IProps {
   disablePast?: boolean;
   minDate?: Moment;
   maxDate?: Moment;
-  date: string;
+  date: Moment;
   onClose?: () => void;
   onChange: (date: Moment) => void;
   onClick?: () => void;
@@ -64,6 +64,7 @@ function DatePicker(props: IProps) {
 
   return (
     <KeyboardDatePicker
+      value="" // REQUIRED BUT IS OVERRIDED IT BELLOW
       minDate={props.minDate ? props.minDate.toDate() : new Date()}
       maxDate={props.maxDate.toDate()}
       disablePast={props.disablePast}
@@ -80,6 +81,7 @@ function DatePicker(props: IProps) {
           onClick={handleOnClick}
           InputProps={{
             readOnly: true,
+            value: props.date.format('DD/MM/YYYY'),
             endAdornment: (
               <InputAdornment position="end">
                 <DateRange />
@@ -90,7 +92,6 @@ function DatePicker(props: IProps) {
       )}
       margin="normal"
       id="date-picker-dialog"
-      value={props.date}
       onChange={(date: Date) => props.onChange(moment(date))}
       KeyboardButtonProps={{
         'aria-label': 'change date'

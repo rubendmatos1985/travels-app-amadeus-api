@@ -1,82 +1,75 @@
-import React, { ChangeEvent, Fragment } from 'react'
-import { useState } from 'react'
-import DateFnsUtils from '@date-io/date-fns'
-import {
-  Paper,
-  createStyles,
-  Theme,
-  Button,
-  withStyles
-} from '@material-ui/core'
-import moment, { Moment } from 'moment'
-import DatePicker from '../../components/SearchPanelComponents/DatePicker'
-import PassengersAmountSelector from '../../components/SearchPanelComponents/PassengersAmountSelector'
-import { compose } from 'redux'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import { connect } from 'react-redux'
-import { Store } from '../../redux/store'
-import { getAutoCompletition } from '../../redux/action'
-import { ReduxAction } from '../../redux/reducers/home'
-import { ThunkDispatch } from 'redux-thunk'
-import { searchPanelStyles as styles } from './styles'
+import React, { ChangeEvent, Fragment } from 'react';
+import { useState } from 'react';
+import DateFnsUtils from '@date-io/date-fns';
+import { Paper, createStyles, Theme, Button, withStyles } from '@material-ui/core';
+import moment, { Moment } from 'moment';
+import DatePicker from '../../components/SearchPanelComponents/DatePicker';
+import PassengersAmountSelector from '../../components/SearchPanelComponents/PassengersAmountSelector';
+import { compose } from 'redux';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { connect } from 'react-redux';
+import { Store } from '../../redux/store';
+import { getAutoCompletition } from '../../redux/action';
+import { ReduxAction } from '../../redux/reducers/home';
+import { ThunkDispatch } from 'redux-thunk';
+import { searchPanelStyles as styles } from './styles';
 import SearchCityTextField, {
   FlightPoint,
   emptySuggestionList,
   ISelectedPlaceData
-} from '../../components/SearchPanelComponents/SearchCityTextField'
+} from '../../components/SearchPanelComponents/SearchCityTextField';
 
 interface IProps {
-  autocompletition: any
-  autocomplete: (input: string) => Promise<any>
-  classes: any
+  autocompletition: any;
+  autocomplete: (input: string) => Promise<any>;
+  classes: any;
 }
 
 function SearchPannel(props: IProps) {
-  const [departDate, setDepartDate] = useState<Moment>(moment())
+  const [departDate, setDepartDate] = useState<Moment>(moment());
   const [returnDate, setReturnDate] = useState<Moment>(
-    moment(departDate).add(7, 'days')
-  )
-  const [originPlace, setOriginPlace] = useState<ISelectedPlaceData>(
-    {} as ISelectedPlaceData
-  )
+    moment(departDate)
+      .clone()
+      .add(7, 'days')
+  );
+  const [originPlace, setOriginPlace] = useState<ISelectedPlaceData>({} as ISelectedPlaceData);
   const [destinationPlace, setDestinationPlace] = useState<ISelectedPlaceData>(
     {} as ISelectedPlaceData
-  )
+  );
 
   const handleDepartDate = (date: Moment) => {
-    setDepartDate(date)
-  }
+    setDepartDate(date);
+  };
 
   const handleReturnDate = (date: Moment) => {
-    setReturnDate(date)
-  }
+    setReturnDate(date);
+  };
 
   const handleOnChangeOriginInput = (e: ChangeEvent<HTMLInputElement>) => {
-    props.autocomplete(e.target.value)
-  }
+    props.autocomplete(e.target.value);
+  };
 
   const handleOnChangeDestinationInput = (e: ChangeEvent<HTMLInputElement>) => {
-    props.autocomplete(e.target.value)
-  }
+    props.autocomplete(e.target.value);
+  };
 
   const handleSelectOriginInput = (data: ISelectedPlaceData) => {
-    setOriginPlace(data)
-  }
+    setOriginPlace(data);
+  };
 
   const handleSelectDestinationInput = (data: ISelectedPlaceData) => {
-    setDestinationPlace(data)
-  }
+    setDestinationPlace(data);
+  };
 
-  const handleSearchFlightOffers = (e: React.MouseEvent) => {}
+  const handleSearchFlightOffers = (e: React.MouseEvent) => {};
 
   const getSuggestionsForOriginInput = () =>
     props.autocompletition
       ? props.autocompletition.data.filter(
           (d: { name: string; iataCode: string }) =>
-            d.name !== destinationPlace.name &&
-            d.iataCode !== destinationPlace.iata
+            d.name !== destinationPlace.name && d.iataCode !== destinationPlace.iata
         )
-      : emptySuggestionList
+      : emptySuggestionList;
 
   const getSuggestionsForDestinationInput = () =>
     props.autocompletition
@@ -84,7 +77,7 @@ function SearchPannel(props: IProps) {
           (d: { name: string; iataCode: string }) =>
             d.name !== originPlace.name && d.iataCode !== originPlace.iata
         )
-      : emptySuggestionList
+      : emptySuggestionList;
 
   return (
     <Fragment>
@@ -110,16 +103,16 @@ function SearchPannel(props: IProps) {
             <div className={props.classes.searchDateContainer}>
               <DatePicker
                 maxDate={moment().add(1, 'year')}
-                disablePast
+                disablePast={true}
                 label="Depart"
-                date={departDate.format('DD/MM/YYYY')}
+                date={departDate}
                 onChange={handleDepartDate}
               />
               <DatePicker
                 minDate={departDate.clone().add(1, 'day')}
                 maxDate={departDate.clone().add(2, 'week')}
                 label="Return"
-                date={returnDate.format('DD/MM/YYYY')}
+                date={returnDate}
                 onChange={handleReturnDate}
               />
             </div>
@@ -141,20 +134,18 @@ function SearchPannel(props: IProps) {
         </Paper>
       </MuiPickersUtilsProvider>
     </Fragment>
-  )
+  );
 }
 
 const mapStateToProps = (store: Store) => ({
   autocompletition: store.home.autocompletition
-})
+});
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<Store, null, ReduxAction>
-) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<Store, null, ReduxAction>) => ({
   autocomplete: (input: string) => dispatch(getAutoCompletition(input))
-})
+});
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles)
-)(SearchPannel)
+)(SearchPannel);

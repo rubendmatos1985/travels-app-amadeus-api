@@ -1,14 +1,14 @@
-import Home from 'common/pages/Home'
-import 'isomorphic-fetch'
-import Test from 'common/pages/Test'
+import Home from 'common/pages/Home';
+import 'isomorphic-fetch';
+import Test from 'common/pages/Test';
 
 export interface SSRRoute {
-  name: string
-  path: string
-  exact: boolean
-  component: any
-  needsFetchData: boolean
-  fetchData?: () => Promise<any>
+  name: string;
+  path: string;
+  exact: boolean;
+  component: any;
+  needsFetchData: boolean;
+  fetchData?: () => Promise<any>;
 }
 
 export const routes: SSRRoute[] = [
@@ -27,4 +27,4 @@ export const routes: SSRRoute[] = [
     component: Test,
     needsFetchData: false
   }
-]
+];
