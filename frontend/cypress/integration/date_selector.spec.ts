@@ -38,9 +38,6 @@ describe('Dates Components', () => {
     });
   });
   it('Depart: Max Future Date 1 year', () => {
-    Cypress.Screenshot.defaults({
-      disableTimersAndAnimations: false
-    });
     cy.get('.MuiPickersCalendarHeader-iconButton').as('buttons');
 
     for (let i: number = 0; i < 14; i++) {
